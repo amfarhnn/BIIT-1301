@@ -1,0 +1,118 @@
+-- FUNCTION 
+
+--7.2.1 Calculate 10% Discount for Payment that Exceed RM80 and 5% for Less Than RM80
+
+
+SET SERVEROUTPUT ON
+SET VERIFY OFF
+
+CREATE OR REPLACE FUNCTION calDisc(totalPay in number) return number is 
+  v_disc number ;
+
+BEGIN
+  if totalPay >= 80 then
+    v_disc := 0.10;
+  else
+    v_disc := 0.05;
+  end if;
+  return v_disc;
+END calDisc;
+
+-- anonymous block 
+accept client_id prompt 'Please enter the client id: '
+accept payment_id prompt 'Please enter the payment id : '
+
+DECLARE 
+
+v_totalPayment payment.totalPayment%type;
+v_discount number ;
+v_clientName client.clientName%type;
+v_afterDisc number ;
+
+BEGIN
+
+SELECT clientName ,totalPayment 
+into v_clientName,v_totalPayment
+from  client NATURAL JOIN payment
+WHERE paymentID= '&payment_ID';
+
+
+v_discount := calDisc(v_totalPayment);
+v_afterDisc := v_totalPayment -(v_totalPayment * v_discount);
+
+
+dbms_output.put_line('The payment for Mr./Mrs./Miss ' ||v_clientName||' before the discount is RM ' ||v_totalPayment);
+dbms_output.put_line('He/She are eligible for '||v_discount *100||'% discount');
+dbms_output.put_line('Final total payment is RM '||v_afterDisc);
+
+
+
+END;
+
+
+
+
+--	7.2.2 Add a 2% Service Charge for Online Payments and a 4% Service Charge for Offline Payments
+
+
+
+
+
+
+SET SERVEROUTPUT ON;
+SET VERIFY OFF;
+
+CREATE OR REPLACE FUNCTION serviceCharge(p_clientid payment.clientid%type) RETURN NUMBER IS 
+
+v_chg NUMBER(10,2);
+v_total payment.totalpayment%type;
+v_type payment.paymenttype%type;
+
+BEGIN  
+   SELECT paymenttype, totalpayment
+   INTO v_type, v_total
+   FROM payment
+   WHERE clientid = p_clientid;
+  
+   IF v_type = 'ONLINE' THEN
+    v_chg := 0.2;
+    DBMS_OUTPUT.PUT_LINE('Service Charge: 2%');
+   ELSE 
+    v_chg := 0.4;
+    DBMS_OUTPUT.PUT_LINE('Service Charge: 4%');
+   END IF; 
+   
+   v_chg := v_chg * v_total + v_total;
+   
+  RETURN v_chg;
+
+END;
+/
+  
+--anon block
+ACCEPT v_clientid PROMPT 'Enter client ID: '
+
+DECLARE
+ v_clientname client.clientname%type;
+ v_clientid client.clientid%type;
+ v_total payment.totalpayment%type;
+
+BEGIN
+ SELECT c.clientname, p.totalpayment
+ INTO v_clientname, v_total
+ FROM client c, payment p
+ WHERE c.clientid = p.clientid
+ AND c.clientid = &v_clientid;
+
+DBMS_OUTPUT.PUT_LINE('Customer name: ' || v_clientname);
+DBMS_OUTPUT.PUT_LINE('Total payment without service charge: RM ' || v_total);
+DBMS_OUTPUT.PUT_LINE('Total payment with service charge: RM ' || serviceCharge(&v_clientid));
+
+exception
+	when NO_DATA_FOUND then dbms_output.put_line('No DATA');
+	when TOO_MANY_ROWS then dbms_output.put_line('Too MANY');
+    
+END;
+/
+
+

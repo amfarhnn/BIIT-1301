@@ -1,0 +1,38 @@
+--INSERT STATEMENT 
+
+--6.2.1 Allow Admin to Insert a New Car
+
+SELECT * FROM CAR;
+
+INSERT INTO CAR VALUES ( 150, 105, 'CIVIC', 'HONDA', 'MPV', 5, 'BLACK', 'VEG4583', 2021, 120, 'AVAILABLE', 'IN GOOD CONDITION');
+
+
+--DELETE STATEMENT
+
+-- 6.3.1 Allow Admin to Remove the Payment Id for 113
+
+SELECT * FROM payment;
+
+DELETE  FROM payment
+WHERE paymentID = 113;
+
+
+--UPDATE STATEMENT
+
+--6.4.1 Modify the Car Price and Display the Car Id
+
+SELECT * FROM car
+WHERE carID = 144;
+
+
+UPDATE CAR
+SET carPrice = 230
+WHERE carID = 144;
+
+--6.4.2 Allow Admin to update Car Notes and Display
+
+
+UPDATE car 
+set carnotes= 'Need Service'
+where cardid=144;
+

@@ -1,0 +1,49 @@
+
+
+-- 6.1.1 Display Client that Spent the Highest
+
+select c.clientname, p.totalpayment
+from client c inner join payment p
+on c.clientid = p.clientid
+and p.totalpayment = (select max(totalpayment) totalpayment
+from payment);
+
+-- 6.1.2 Display Client that Did Not Make Any Booking
+
+update booking
+set clientid = 202 
+where carid = 141;
+
+select clientid, clientname
+from client
+where clientid not in
+(select clientid from booking);
+
+rollback;
+
+
+--6.1.3 Display Client that Book Car Id 140
+
+select b.clientid, c.clientname, k.carid, k.carname
+from client c, booking b, car k
+where c.clientid = b.clientid
+and b.carid = k.carid
+and k.carid = 140;
+
+--6.1.4 Display Booking and Car Id that Manage by Admin 103
+
+select bookingid, carid
+from booking 
+where adminid = 103;
+
+
+
+--6.1.5 Sort the Car in Alphabetical Order by Name
+
+select carid, carname, carbrand
+from car
+order by carname asc;
+
+
+
+

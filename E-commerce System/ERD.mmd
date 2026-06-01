@@ -1,0 +1,87 @@
+erDiagram
+  ADMIN ||--o{ PRODUCT : manages
+  ADMIN ||--o{ SALES_ORDER : handles
+  CUSTOMER ||--o{ SALES_ORDER : places
+  CATEGORY ||--o{ PRODUCT : groups
+  SALES_ORDER ||--o{ ORDER_ITEM : contains
+  PRODUCT ||--o{ ORDER_ITEM : appears_in
+  SALES_ORDER ||--|| PAYMENT : has
+  SALES_ORDER ||--|| SHIPMENT : ships
+
+  ADMIN {
+    NUMBER adminID PK
+    VARCHAR2 adminName
+    VARCHAR2 adminEmail
+    VARCHAR2 adminContact
+    VARCHAR2 adminPassword
+  }
+
+  CUSTOMER {
+    NUMBER customerID PK
+    VARCHAR2 customerName
+    VARCHAR2 customerEmail
+    VARCHAR2 customerPhone
+    VARCHAR2 customerAddress
+    VARCHAR2 customerPassword
+    DATE joinDate
+  }
+
+  CATEGORY {
+    NUMBER categoryID PK
+    VARCHAR2 categoryName
+    VARCHAR2 categoryDescription
+  }
+
+  PRODUCT {
+    NUMBER productID PK
+    NUMBER categoryID FK
+    NUMBER adminID FK
+    VARCHAR2 productName
+    VARCHAR2 productBrand
+    NUMBER unitPrice
+    NUMBER stockQty
+    VARCHAR2 productStatus
+    DATE createdDate
+  }
+
+  SALES_ORDER {
+    NUMBER orderID PK
+    NUMBER customerID FK
+    NUMBER adminID FK
+    DATE orderDate
+    VARCHAR2 orderStatus
+    NUMBER subtotal
+    NUMBER deliveryFee
+    NUMBER totalAmount
+  }
+
+  ORDER_ITEM {
+    NUMBER orderItemID PK
+    NUMBER orderID FK
+    NUMBER productID FK
+    NUMBER quantity
+    NUMBER unitPrice
+    NUMBER lineTotal
+  }
+
+  PAYMENT {
+    NUMBER paymentID PK
+    NUMBER orderID FK
+    NUMBER customerID FK
+    DATE paymentDate
+    VARCHAR2 paymentMethod
+    VARCHAR2 paymentStatus
+    NUMBER paymentAmount
+  }
+
+  SHIPMENT {
+    NUMBER shipmentID PK
+    NUMBER orderID FK
+    VARCHAR2 courierName
+    VARCHAR2 trackingNo
+    VARCHAR2 shippingAddress
+    DATE shippedDate
+    DATE deliveredDate
+    VARCHAR2 shipmentStatus
+  }
+
