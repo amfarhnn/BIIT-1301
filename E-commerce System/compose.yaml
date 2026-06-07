@@ -1,0 +1,15 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8081:80"
+    environment:
+      DB_USERNAME: "${DB_USERNAME:-system}"
+      DB_PASSWORD: "${DB_PASSWORD:-password}"
+      DB_CONNECTION_STRING: "${DB_CONNECTION_STRING:-host.docker.internal:1521/XE}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - "./WEB:/var/www/html"
+      - "./SCRIPT:/database/scripts:ro"
+      - "./database:/database/tools:ro"

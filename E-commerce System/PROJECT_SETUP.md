@@ -24,6 +24,26 @@ You may also run `SCRIPT/run_all.sql` from inside the `SCRIPT` folder to execute
 http://localhost/WEB/index.php
 ```
 
+## Docker Web Application Setup
+
+Docker runs Apache, PHP, and OCI8 in an isolated container while connecting to
+the Oracle XE database running on Windows.
+
+1. Copy `.env.example` to `.env` and enter the Oracle account password.
+2. From the `E-commerce System` folder, run:
+
+```powershell
+docker compose up --build
+```
+
+3. Open:
+
+```text
+http://localhost:8081
+```
+
+The Docker app connects to Oracle XE using `host.docker.internal:1521/XE`.
+
 ## Suggested Demo Flow
 
 1. Show the dashboard.

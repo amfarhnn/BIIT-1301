@@ -47,7 +47,49 @@ define('DB_CONNECTION_STRING', 'localhost/XEPDB1');
 http://localhost/WEB/index.php
 ```
 
+## Docker Setup
+
+Docker runs PHP with OCI8 already installed and connects to Oracle XE running on
+the Windows host.
+
+From the `E-commerce System` folder:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Update `.env` with the Oracle account that owns the e-commerce tables:
+
+```text
+DB_USERNAME=system
+DB_PASSWORD=your_actual_oracle_password
+DB_CONNECTION_STRING=host.docker.internal:1521/XE
+```
+
+Then build and start the web app:
+
+```powershell
+docker compose up --build -d
+```
+
+Initialize or reset the project tables without SQL Developer:
+
+```powershell
+docker compose exec web php /database/tools/init.php
+```
+
+Open:
+
+```text
+http://localhost:8081/
+```
+
+After changing `.env`, recreate the container:
+
+```powershell
+docker compose up -d --force-recreate
+```
+
 ## Notes
 
 If your Oracle service name is different, change `DB_CONNECTION_STRING`. Common values are `localhost/XEPDB1`, `localhost/XE`, or a full connection descriptor from Oracle SQL Developer.
-

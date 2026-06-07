@@ -20,11 +20,15 @@ try {
     echo '</section>';
 
     $orders = execute_query(
-        "SELECT so.orderID, c.customerName, so.orderDate, so.orderStatus, so.totalAmount, p.paymentStatus
-         FROM sales_order so
-         JOIN customer c ON so.customerID = c.customerID
-         JOIN payment p ON so.orderID = p.orderID
-         ORDER BY so.orderDate DESC FETCH FIRST 8 ROWS ONLY"
+        "SELECT *
+         FROM (
+             SELECT so.orderID, c.customerName, so.orderDate, so.orderStatus, so.totalAmount, p.paymentStatus
+             FROM sales_order so
+             JOIN customer c ON so.customerID = c.customerID
+             JOIN payment p ON so.orderID = p.orderID
+             ORDER BY so.orderDate DESC
+         )
+         WHERE ROWNUM <= 8"
     );
 
     echo '<section class="card" style="margin-top:16px">';
@@ -49,4 +53,3 @@ try {
 
 render_footer();
 ?>
-
